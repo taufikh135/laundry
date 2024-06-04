@@ -1,0 +1,527 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laundry",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://golaundry.my.id/api",
+            "description": "Production server"
+        },
+        {
+            "url": "http://golaundry.my.id"
+        }
+    ],
+
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "number_phone": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "name": "John Doe",
+                                "number_phone": "08123456789",
+                                "password": "rahasia123"
+                            }
+                        }
+                    }
+                },
+
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "number_phone": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["number_phone", "password"]
+                            },
+                            "example": {
+                                "number_phone": "08123456789",
+                                "password": "rahasia123"
+                            }
+                        }
+                    }
+                },
+
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0NzUxNjUxMiwiZXhwIjoxNjQ3NzE3NTEyfQ.6yU2k3gXQq7iJGkR0N9J0XbJzXkLxG6YqFqK0WYr8T0"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/auth/forgot-password": {
+            "post": {
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "number_phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["number_phone"]
+                            },
+                            "example": {
+                                "number_phone": "628123456789"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "OTP has been sent to your Whatsapp number"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/auth/verification": {
+            "get": {
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                        "name": "number_phone",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "Link verifikasi berhasil dikirimkan ke nomor Whatsapp 628123456789"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/users/current": {
+            "get": {
+                "tags": ["Users"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "id": 1,
+                                        "name": "John Doe",
+                                        "number_phone": "08123456789",
+                                        "address": "Jl. Raya No. 1",
+                                        "created_at": "2022-01-01 00:00:00",
+                                        "updated_at": "2022-01-01 00:00:00"
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "put": {
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "number_phone": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/categories": {
+            "get": {
+                "tags": ["Categories"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "Category 1",
+                                            "image": "/image.png"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/categories/{id}": {
+            "get": {
+                "tags": ["Categories"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "id": 1,
+                                        "name": "Category 1",
+                                        "image": "/image.png"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/products": {
+            "get": {
+                "tags": ["Products"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "category_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "Product 1",
+                                            "description": "Description 1",
+                                            "category_id": 1,
+                                            "price": 10000,
+                                            "image": "/image.png"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/products/{id}": {
+            "get": {
+                "tags": ["Products"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "id": 1,
+                                        "name": "Product 1",
+                                        "description": "Description 1",
+                                        "category_id": 1,
+                                        "price": 10000,
+                                        "image": "/image.png"
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/orders": {
+            "get": {
+                "tags": ["Orders"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "user_id": 1,
+                                            "status": "pending",
+                                            "created_at": "2022-01-01 00:00:00",
+                                            "updated_at": "2022-01-01 00:00:00"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "post": {
+                "tags": ["Orders"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    },
+                                    "payment_id": {
+                                        "type": "integer"
+                                    },
+                                    "note": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/syarat-ketentuan": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "content": {
+                                            "text": "Syarat dan ketentuan"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "tags": [
+        {
+            "name": "Auth"
+        }
+    ]
+}
