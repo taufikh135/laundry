@@ -21,6 +21,7 @@ class ApiAuthControllerTest extends TestCase
             'name' => 'test',
             'number_phone' => '6281317826173',
             'password' => 'test123',
+            'address' => 'test',
         ]);
         $response->assertStatus(200);
         $response->assertJson([
@@ -36,7 +37,8 @@ class ApiAuthControllerTest extends TestCase
             'errors' => [
                 'name',
                 'number_phone',
-                'password'
+                'password',
+                'address',
             ]
         ]);
     }

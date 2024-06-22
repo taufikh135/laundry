@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "https://golaundry.my.id/api",
+            "url": "http://127.0.0.1:8000/api",
             "description": "Production server"
         },
         {
@@ -89,7 +89,7 @@
                                 "required": ["number_phone", "password"]
                             },
                             "example": {
-                                "number_phone": "08123456789",
+                                "number_phone": "628123456789",
                                 "password": "rahasia123"
                             }
                         }
@@ -152,7 +152,7 @@
                             "application/json": {
                                 "example": {
                                     "success": true,
-                                    "message": "OTP has been sent to your Whatsapp number"
+                                    "message": "Link ganti password berhasil dikirimkan ke nomor Whatsapp 628123456789"
                                 }
                             }
                         }
@@ -174,18 +174,26 @@
         },
 
         "/auth/verification": {
-            "get": {
+            "post": {
                 "tags": ["Auth"],
-                "parameters": [
-                    {
-                        "name": "number_phone",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "number_phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["number_phone"]
+                            },
+                            "example": {
+                                "number_phone": "628123456789"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "content": {
@@ -235,7 +243,7 @@
                         }
                     },
 
-                    "400": {
+                    "401": {
                         "content": {
                             "application/json": {
                                 "example": {
@@ -288,7 +296,7 @@
                                         {
                                             "id": 1,
                                             "name": "Category 1",
-                                            "image": "/image.png"
+                                            "image_path": "/image.png"
                                         }
                                     ]
                                 }
@@ -321,7 +329,7 @@
                                     "data": {
                                         "id": 1,
                                         "name": "Category 1",
-                                        "image": "/image.png"
+                                        "image_path": "/image.png"
                                     }
                                 }
                             }
@@ -335,6 +343,31 @@
                                     "errors": {
                                         "{attribute}": ["{message}"]
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/types": {
+            "get": {
+                "tags": ["Types"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "name": "Type 1",
+                                            "image_path": "/image.png",
+                                            "description": "Description 1"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -365,10 +398,9 @@
                                         {
                                             "id": 1,
                                             "name": "Product 1",
-                                            "description": "Description 1",
                                             "category_id": 1,
                                             "price": 10000,
-                                            "image": "/image.png"
+                                            "image_path": "/image.png"
                                         }
                                     ]
                                 }
@@ -391,10 +423,9 @@
                                     "data": {
                                         "id": 1,
                                         "name": "Product 1",
-                                        "description": "Description 1",
                                         "category_id": 1,
                                         "price": 10000,
-                                        "image": "/image.png"
+                                        "image_path": "/image.png"
                                     }
                                 }
                             }
@@ -418,6 +449,50 @@
         },
 
         "/orders": {
+            "post": {
+                "tags": ["Orders"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    },
+                                    "method_payment_id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "product_id": 1,
+                                "quantity": 2,
+                                "method_payment_id": 3
+                            }
+                        }
+                    }
+                },
+
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "order_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
             "get": {
                 "tags": ["Orders"],
                 "parameters": [
@@ -456,39 +531,147 @@
                         }
                     }
                 }
-            },
+            }
+        },
 
-            "post": {
-                "tags": ["Orders"],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "product_id": {
-                                        "type": "integer"
+        "/payment-methods": {
+            "get": {
+                "tags": ["Method Payments"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "with image": {
+                                        "value": {
+                                            "success": true,
+                                            "data": [
+                                                {
+                                                    "id": 1,
+                                                    "code": "DNA",
+                                                    "name": "Payment 1",
+                                                    "nomor_rekening": "1234567890",
+                                                    "atas_nama_rekening": "John Doe",
+                                                    "image_path": "/image.png",
+                                                    "logo_path": "/logo.png"
+                                                }
+                                            ]
+                                        }
                                     },
-                                    "quantity": {
-                                        "type": "integer"
-                                    },
-                                    "payment_id": {
-                                        "type": "integer"
-                                    },
-                                    "note": {
-                                        "type": "string"
+
+                                    "without image": {
+                                        "value": {
+                                            "success": true,
+                                            "data": [
+                                                {
+                                                    "id": 1,
+                                                    "code": "DNA",
+                                                    "name": "Payment 1",
+                                                    "nomor_rekening": "1234567890",
+                                                    "atas_nama_rekening": "John Doe",
+                                                    "image_path": null,
+                                                    "logo_path": "/logo.png"
+                                                }
+                                            ]
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                },
+                }
+            }
+        },
+
+        "/payment-methods/{id}": {
+            "get": {
+                "tags": ["Method Payments"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "with image": {
+                                        "value": {
+                                            "success": true,
+                                            "data": {
+                                                "id": 1,
+                                                "code": "DNA",
+                                                "name": "DANA",
+                                                "nomor_rekening": "1234567890",
+                                                "atas_nama_rekening": "John Doe",
+                                                "image_path": "/image.png",
+                                                "logo_path": "/logo.png"
+                                            }
+                                        }
+                                    },
+
+                                    "without image": {
+                                        "value": {
+                                            "success": true,
+                                            "data": {
+                                                "id": 1,
+                                                "code": "DNA",
+                                                "name": "DANA",
+                                                "nomor_rekening": "1234567890",
+                                                "atas_nama_rekening": "John Doe",
+                                                "image_path": null,
+                                                "logo_path": "/logo.png"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/payments": {
+            "get": {
+                "tags": ["Payments"],
                 "responses": {
                     "200": {
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "success": true
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "payment_method_id": 1,
+                                            "order_id": 1,
+                                            "status": "pending",
+                                            "created_at": "2022-01-01 00:00:00",
+                                            "updated_at": "2022-01-01 00:00:00"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "/payments/{id}": {
+                "get": {
+                    "tags": ["Payments"],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 1,
+                                            "payment_method_id": 1,
+                                            "order_id": 1,
+                                            "status": "pending",
+                                            "created_at": "2022-01-01 00:00:00",
+                                            "updated_at": "2022-01-01 00:00:00"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -509,6 +692,69 @@
                                         "content": {
                                             "text": "Syarat dan ketentuan"
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/contacts": {
+            "get": {
+                "tags": ["Contacts"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": [
+                                        {
+                                            "id": "WA",
+                                            "name": "Whatsapp",
+                                            "account": "628123456789",
+                                            "account_name": "John Doe",
+                                            "redirect_url": "https://wa.me/628123456789"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/contacts/{id}": {
+            "get": {
+                "tags": ["Contacts"],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "data": {
+                                        "id": "WA",
+                                        "name": "Whatsapp",
+                                        "account": "628123456789",
+                                        "account_name": "John Doe",
+                                        "redirect_url": "https://wa.me/628123456789"
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "errors": {
+                                        "{attribute}": ["{message}"]
                                     }
                                 }
                             }

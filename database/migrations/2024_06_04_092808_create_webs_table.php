@@ -15,7 +15,6 @@ return new class extends Migration
             $table->integer('id')->primary()->default(1);
             $table->string('brand_name');
             $table->text('syarat_ketentuan');
-            $table->string('cs_redirect_url');
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('webs');
+        Schema::dropIfExists('web');
     }
 };

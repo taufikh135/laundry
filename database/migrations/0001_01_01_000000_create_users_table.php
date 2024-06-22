@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('number_phone')->unique();
+            $table->string('address');
             $table->timestamp('number_phone_verified_at')->nullable();
-            $table->string('password');
-            $table->enum('role', ['Admin', 'Pelanggan'])->default('Pelanggan');
+            $table->bigInteger('point')->unsigned()->default(0);
+            $table->enum('role', ['Admin', 'Pelanggan', 'Owner'])->default('Pelanggan');
             $table->enum('status', ['Active', 'Inactive', 'Banned'])->default('Active');
             $table->string('reset_password_token')->nullable();
             $table->string('number_phone_verified_token')->nullable();
+            $table->string('password');
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

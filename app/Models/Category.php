@@ -11,18 +11,20 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-    protected $primaryKey = 'id';
-    protected $keyType = 'int';
+    protected $primaryKey = 'code';
+    protected $keyType = 'string';
     public $timestamps = false;
-    public $incrementing = true;
+    public $incrementing = false;
 
     protected $fillable = [
         'name',
-        'image',
+        'code',
+        'image_path',
+        'status',
     ];
 
-    public function jenis(): HasMany
+    public function types(): HasMany
     {
-        return $this->hasMany(Jenis::class, 'category_id', 'id');
+        return $this->hasMany(Type::class, 'category_code', 'code');
     }
 }

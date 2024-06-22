@@ -18,7 +18,6 @@ class WebSeeder extends Seeder
         $web = new Web();
         $web->brand_name = 'Laundry';
         $web->syarat_ketentuan = '<h1>Syarat & Ketentuan</h1>';
-        $web->cs_redirect_url = 'https://wa.me/6281234567890';
         $web->save();
     }
 }

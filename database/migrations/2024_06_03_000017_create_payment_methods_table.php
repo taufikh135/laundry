@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->enum('type', ['Cash', 'Transfer', 'QR']);
+            $table->string('logo_path');
+            $table->string('qr_path')->nullable();
             $table->string('name');
             $table->string('atas_nama_rekening');
             $table->string('nomor_rekening');
-            $table->string('image_path');
-
-            $table->timestamps();
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
         });
     }
 
